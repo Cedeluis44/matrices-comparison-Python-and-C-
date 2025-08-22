@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <cblas.h>  // Necesitas tener instalada la implementación de BLAS (ej. OpenBLAS, Intel MKL)
+#include <cblas.h>
 
 // Función para generar matriz aleatoria de 0 y 1
 void generar_matriz(int n, double *M) {
@@ -21,9 +21,9 @@ int main() {
 
     A = (double *)malloc(n * n * sizeof(double));
     B = (double *)malloc(n * n * sizeof(double));
-    C = (double *)calloc(n * n, sizeof(double)); // inicializa en 0
+    C = (double *)calloc(n * n, sizeof(double));
 
-    srand(time(NULL)); // semilla para números aleatorios
+    srand(time(NULL));
 
     // Tiempo inicio para generar A
     clock_t start_gen = clock();
@@ -31,14 +31,10 @@ int main() {
     clock_t end_gen = clock();
     double tiempo_gen = (double)(end_gen - start_gen) / CLOCKS_PER_SEC;
 
-    // Generar B (no medimos tiempo aquí, solo A según tu requerimiento)
     generar_matriz(n, B);
 
     // Tiempo inicio para multiplicación
     clock_t start_mul = clock();
-
-    // BLAS: C = A * B + C
-    // Parámetros: RowMajor, No transpose, No transpose
     cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans,
                 n, n, n,
                 1.0, A, n,
@@ -47,7 +43,7 @@ int main() {
 
     clock_t end_mul = clock();
     double tiempo_mul = (double)(end_mul - start_mul) / CLOCKS_PER_SEC;
-
+    
     // Resultados
     printf("Tiempo de generación de la matriz A: %f segundos\n", tiempo_gen);
     printf("Tiempo de multiplicación de matrices: %f segundos\n", tiempo_mul);
